@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Osaro Cooperative - Financial Literacy Story</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #87CEEB 0%, #98FB98 100%);
+            overflow-x: hidden;
+        }
+
+        .animation-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .scene {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .scene.active {
+            opacity: 1;
+        }
+
+        .narrator-box {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            max-width: 80%;
+            text-align: center;
+            font-size: 16px;
+            line-height: 1.4;
+            z-index: 100;
+        }
+
+        /* Characters */
+        .character {
+            position: absolute;
+            transition: all 0.5s ease;
+        }
+
+        .narrator {
+            bottom: 30%;
+            left: 10%;
+            width: 120px;
+            height: 150px;
+        }
+
+        .narrator .head {
+            width: 60px;
+            height: 60px;
+            background: #D2B48C;
+            border-radius: 50%;
+            margin: 0 auto 10px;
+            position: relative;
+        }
+
+        .narrator .eyes {
+            position: absolute;
+            top: 20px;
+            left: 15px;
+            width: 8px;
+            height: 8px;
+            background: black;
+            border-radius: 50%;
+            animation: blink 3s infinite;
+        }
+
+        .narrator .eyes::after {
+            content: '';
+            position: absolute;
+            left: 20px;
+            width: 8px;
+            height: 8px;
+            background: black;
+            border-radius: 50%;
+        }
+
+        .narrator .mouth {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 10px;
+            border: 2px solid black;
+            border-top: none;
+            border-radius: 0 0 20px 20px;
+            animation: talk 2s infinite;
+        }
+
+        .narrator .body {
+            width: 80px;
+            height: 70px;
+            background: #FF6B6B;
+            border-radius: 10px;
+            margin: 0 auto;
+        }
+
+        .narrator .arms {
+            position: absolute;
+            top: 70px;
+            left: 20px;
+            width: 15px;
+            height: 40px;
+            background: #D2B48C;
+            border-radius: 10px;
+            animation: wave 2s infinite;
+        }
+
+        .narrator .arms::after {
+            content: '';
+            position: absolute;
+            right: -65px;
+            width: 15px;
+            height: 40px;
+            background: #D2B48C;
+            border-radius: 10px;
+            animation: wave 2s infinite 0.5s;
+        }
+
+        /* Iye Nosa Character */
+        .iye-nosa {
+            bottom: 30%;
+            right: 20%;
+            width: 100px;
+            height: 140px;
+        }
+
+        .iye-nosa .head {
+            width: 50px;
+            height: 50px;
+            background: #8B4513;
+            border-radius: 50%;
+            margin: 0 auto 10px;
+            position: relative;
+        }
+
+        .iye-nosa .headwrap {
+            position: absolute;
+            top: -10px;
+            left: -5px;
+            width: 60px;
+            height: 30px;
+            background: #FF1493;
+            border-radius: 50px;
+        }
+
+        .iye-nosa .body {
+            width: 70px;
+            height: 60px;
+            background: #32CD32;
+            border-radius: 10px;
+            margin: 0 auto;
+        }
+
+        /* Teaching Scene Characters */
+        .teacher {
+            bottom: 40%;
+            left: 30%;
+            width: 120px;
+            height: 160px;
+        }
+
+        .teacher .head {
+            width: 60px;
+            height: 60px;
+            background: #8B4513;
+            border-radius: 50%;
+            margin: 0 auto 10px;
+            position: relative;
+        }
+
+        .teacher .body {
+            width: 80px;
+            height: 80px;
+            background: #4169E1;
+            border-radius: 10px;
+            margin: 0 auto;
+        }
+
+        .teacher .pointer {
+            position: absolute;
+            top: 70px;
+            right: -20px;
+            width: 30px;
+            height: 3px;
+            background: #8B4513;
+            transform-origin: left;
+            animation: point 2s infinite;
+        }
+
+        .students {
+            bottom: 25%;
+            right: 20%;
+            display: flex;
+            gap: 20px;
+        }
+
+        .student {
+            width: 80px;
+            height: 120px;
+        }
+
+        .student .head {
+            width: 40px;
+            height: 40px;
+            background: #D2B48C;
+            border-radius: 50%;
+            margin: 0 auto 8px;
+        }
+
+        .student:nth-child(2) .head {
+            background: #8B4513;
+        }
+
+        .student:nth-child(3) .head {
+            background: #DEB887;
+        }
+
+        .student .body {
+            width: 60px;
+            height: 50px;
+            background: #FFB6C1;
+            border-radius: 8px;
+            margin: 0 auto;
+        }
+
+        .student:nth-child(2) .body {
+            background: #98FB98;
+        }
+
+        .student:nth-child(3) .body {
+            background: #87CEFA;
+        }
+
+        /* Blackboard */
+        .blackboard {
+            position: absolute;
+            top: 15%;
+            left: 10%;
+            width: 300px;
+            height: 200px;
+            background: #2F4F2F;
+            border: 8px solid #8B4513;
+            border-radius: 5px;
+        }
+
+        .blackboard-text {
+            color: white;
+            padding: 20px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* Farm elements */
+        .chicken-coop {
+            position: absolute;
+            bottom: 20%;
+            right: 15%;
+            width: 150px;
+            height: 100px;
+            background: #8B4513;
+            border-radius: 5px;
+        }
+
+        .chicken-coop::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 0;
+            width: 150px;
+            height: 40px;
+            background: #654321;
+            clip-path: polygon(0 100%, 50% 0, 100% 100%);
+        }
+
+        .chickens {
+            position: absolute;
+            bottom: 10px;
+            left: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .chicken {
+            width: 20px;
+            height: 15px;
+            background: white;
+            border-radius: 50%;
+            animation: peck 2s infinite;
+        }
+
+        .chicken::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: 15px;
+            width: 8px;
+            height: 8px;
+            background: orange;
+            clip-path: polygon(0 0, 100% 50%, 0 100%);
+        }
+
+        /* Money and records */
+        .money-notes {
+            position: absolute;
+            top: 50%;
+            left: 60%;
+            display: flex;
+            gap: 5px;
+        }
+
+        .note {
+            width: 30px;
+            height: 15px;
+            background: #228B22;
+            border-radius: 2px;
+            animation: float 3s infinite ease-in-out;
+        }
+
+        .note:nth-child(2) {
+            animation-delay: 0.5s;
+            background: #32CD32;
+        }
+
+        .note:nth-child(3) {
+            animation-delay: 1s;
+            background: #90EE90;
+        }
+
+        .notebook {
+            position: absolute;
+            top: 40%;
+            right: 25%;
+            width: 80px;
+            height: 60px;
+            background: #FFE4B5;
+            border: 2px solid #8B4513;
+            border-radius: 3px;
+        }
+
+        .notebook::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 10px;
+            right: 10px;
+            bottom: 10px;
+            background: repeating-linear-gradient(
+                transparent,
+                transparent 8px,
+                #4169E1 8px,
+                #4169E1 9px
+            );
+        }
+
+        /* Controls */
+        .controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 200;
+        }
+
+        .control-btn {
+            padding: 10px 20px;
+            background: #4169E1;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+
+        .control-btn:hover {
+            background: #1E90FF;
+        }
+
+        .control-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* Scene indicators */
+        .scene-indicator {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 16px;
+            z-index: 200;
+        }
+
+        /* Animations */
+        @keyframes blink {
+            0%, 90%, 100% { transform: scaleY(1); }
+            95% { transform: scaleY(0.1); }
+        }
+
+        @keyframes talk {
+            0%, 50% { transform: translateX(-50%) scaleY(1); }
+            25% { transform: translateX(-50%) scaleY(0.8); }
+        }
+
+        @keyframes wave {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(20deg); }
+        }
+
+        @keyframes point {
+            0%, 100% { transform: rotate(10deg); }
+            50% { transform: rotate(30deg); }
+        }
+
+        @keyframes peck {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(5px); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .blackboard {
+                width: 250px;
+                height: 150px;
+            }
+            
+            .blackboard-text {
+                font-size: 12px;
+                padding: 15px;
+            }
+            
+            .narrator-box {
+                font-size: 14px;
+                padding: 12px 20px;
+            }
+            
+            .controls {
+                bottom: 10px;
+                right: 10px;
+            }
+            
+            .control-btn {
+                padding: 8px 15px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="animation-container">
+        <div class="scene-indicator">
+            <span id="scene-title">Introduction</span>
+        </div>
+
+        <!-- Scene 1: Introduction -->
+        <div class="scene active" id="scene-1">
+            <div class="character narrator">
+                <div class="head">
+                    <div class="eyes"></div>
+                    <div class="mouth"></div>
+                </div>
+                <div class="body"></div>
+                <div class="arms"></div>
+            </div>
+            <div class="chicken-coop">
+                <div class="chickens">
+                    <div class="chicken"></div>
+                    <div class="chicken"></div>
+                    <div class="chicken"></div>
+                </div>
+            </div>
+            <div class="narrator-box">
+                My people una doh ooo! I like this cooperative wen I join. For Osaro Cooperative, we dey do plenty things – from poultry to egg selling, from farming to small business. But wetin go make all our effort sweet na when we sabi manage our money well. Dis one na wetin dem dey call financial literacy.
+            </div>
+        </div>
+
+        <!-- Scene 2: Iye Nosa Trouble -->
+        <div class="scene" id="scene-2">
+            <div class="character iye-nosa">
+                <div class="head">
+                    <div class="headwrap"></div>
+                </div>
+                <div class="body"></div>
+            </div>
+            <div class="chicken-coop">
+                <div class="chickens">
+                    <div class="chicken"></div>
+                    <div class="chicken"></div>
+                </div>
+            </div>
+            <div class="money-notes">
+                <div class="note"></div>
+                <div class="note"></div>
+                <div class="note"></div>
+            </div>
+            <div class="narrator-box">
+                Iye Nosa na one of our members. She dey train fowl and sell egg for market. But every time she collect small loan, she no dey know wetin she use the money do. She go say, 'na small money now' – but wen month end, she no fit pay the small loan wey she collect.
+            </div>
+        </div>
+
+        <!-- Scene 3: Why This Happen -->
+        <div class="scene" id="scene-3">
+            <div class="character iye-nosa">
+                <div class="head">
+                    <div class="headwrap"></div>
+                </div>
+                <div class="body"></div>
+            </div>
+            <div class="narrator-box">
+                Why this dey happen be say many of us no dey see the reason to write how much we sell and how much we dey spend. We no dey plan ahead or save for emergency. If problem come – like sick pikin or cage break – we dey run kiti kata kiti kata to find money.
+            </div>
+        </div>
+
+        <!-- Scene 4: Teaching Scene -->
+        <div class="scene" id="scene-4">
+            <div class="blackboard">
+                <div class="blackboard-text">
+                    Financial Literacy:<br>
+                    • Save Money<br>
+                    • Keep Records<br>
+                    • Plan Spending<br>
+                    • Track Income & Expenses
+                </div>
+            </div>
+            <div class="character teacher">
+                <div class="head"></div>
+                <div class="body"></div>
+                <div class="pointer"></div>
+            </div>
+            <div class="students">
+                <div class="student">
+                    <div class="head"></div>
+                    <div class="body"></div>
+                </div>
+                <div class="student">
+                    <div class="head"></div>
+                    <div class="body"></div>
+                </div>
+                <div class="student">
+                    <div class="head"></div>
+                    <div class="body"></div>
+                </div>
+            </div>
+            <div class="narrator-box">
+                One day na, Apa Osadolor, wey sabi book, come teach us for cooperative meeting. He talk say, 'Financial literacy na when you sabi how to save, borrow well, plan your spending, and record the money wen they enter your hand and money wen dey comot from your hand.' He show us how to use small notebook and calculator.
+            </div>
+        </div>
+
+        <!-- Scene 5: Iye Nosa Turn Around -->
+        <div class="scene" id="scene-5">
+            <div class="character iye-nosa">
+                <div class="head">
+                    <div class="headwrap"></div>
+                </div>
+                <div class="body"></div>
+            </div>
+            <div class="notebook"></div>
+            <div class="money-notes">
+                <div class="note"></div>
+                <div class="note"></div>
+                <div class="note"></div>
+                <div class="note"></div>
+                <div class="note"></div>
+            </div>
+            <div class="chicken-coop">
+                <div class="chickens">
+                    <div class="chicken"></div>
+                    <div class="chicken"></div>
+                    <div class="chicken"></div>
+                    <div class="chicken"></div>
+                </div>
+            </div>
+            <div class="narrator-box">
+                After that day na, Iye Nosa eye con open. She con begin dey write down everything she dey sell – egg ooo, chicken ooo, and even pepper. She dey save ₦200 every week. After 3 months, she buy bigger cage and come pay pikin school fees.
+            </div>
+        </div>
+
+        <!-- Scene 6: Collective Progress -->
+        <div class="scene" id="scene-6">
+            <div class="students">
+                <div class="student">
+                    <div class="head"></div>
+                    <div class="body"></div>
+                </div>
+                <div class="student">
+                    <div class="head"></div>
+                    <div class="body"></div>
+                </div>
+                <div class="student">
+                    <div class="head"></div>
+                    <div class="body"></div>
+                </div>
+                <div class="student">
+                    <div class="head"></div>
+                    <div class="body"></div>
+                </div>
+            </div>
+            <div class="money-notes">
+                <div class="note"></div>
+                <div class="note"></div>
+                <div class="note"></div>
+                <div class="note"></div>
+                <div class="note"></div>
+                <div class="note"></div>
+            </div>
+            <div class="narrator-box">
+                As more members con begin they follow this method wey Apa Osadolor teach us, our cooperative con dey grow. We dey plan well, we dey save for group project, and we dey support each other with small loans and business sense. Even bank come dey take us serious because we get record and we dey pay back on time.
+            </div>
+        </div>
+
+        <!-- Scene 7: Conclusion -->
+        <div class="scene" id="scene-7">
+            <div class="character narrator">
+                <div class="head">
+                    <div class="eyes"></div>
+                    <div class="mouth"></div>
+                </div>
+                <div class="body"></div>
+                <div class="arms"></div>
+            </div>
+            <div class="students">
+                <div class="student">
+                    <div class="head"></div>
+                    <div class="body"></div>
+                </div>
+                <div class="student">
+                    <div class="head"></div>
+                    <div class="body"></div>
+                </div>
+                <div class="student">
+                    <div class="head"></div>
+                    <div class="body"></div>
+                </div>
+            </div>
+            <div class="chicken-coop">
+                <div class="chickens">
+                    <div class="chicken"></div>
+                    <div class="chicken"></div>
+                    <div class="chicken"></div>
+                    <div class="chicken"></div>
+                </div>
+            </div>
+            <div class="narrator-box">
+                Financial literacy na key to progress – for everyone and for Osaro Cooperative as a whole. When we manage our money with sense, we go grow our farm, train our pikin, and build better future. Make we take am serious – na rain dey fill bucket no be dew ooo! Una doooo!
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="control-btn" id="prevBtn" onclick="prevScene()">Previous</button>
+            <button class="control-btn" id="playBtn" onclick="togglePlay()">Play</button>
+            <button class="control-btn" id="nextBtn" onclick="nextScene()">Next</button>
+        </div>
+    </div>
+
+    <script>
+        let currentScene = 1;
+        let isPlaying = false;
+        let playInterval;
+        const totalScenes = 7;
+
+        const sceneTitles = [
+            '',
+            'Introduction to Osaro Cooperative',
+            'Iye Nosa\'s Financial Troubles',
+            'Understanding the Problem',
+            'Apa Osadolor Teaches Financial Literacy',
+            'Iye Nosa\'s Transformation',
+            'Collective Progress',
+            'Conclusion - Financial Literacy Success'
+        ];
+
+        function showScene(sceneNum) {
+            // Hide all scenes
+            document.querySelectorAll('.scene').forEach(scene => {
+                scene.classList.remove('active');
+            });
+            
+            // Show current scene
+            document.getElementById(`scene-${sceneNum}`).classList.add('active');
+            
+            // Update scene title
+            document.getElementById('scene-title').textContent = sceneTitles[sceneNum];
+            
+            // Update button states
+            document.getElementById('prevBtn').disabled = sceneNum === 1;
+            document.getElementById('nextBtn').disabled = sceneNum === totalScenes;
+        }
+
+        function nextScene() {
+            if (currentScene < totalScenes) {
+                currentScene++;
+                showScene(currentScene);
+            }
+        }
+
+        function prevScene() {
+            if (currentScene > 1) {
+                currentScene--;
+                showScene(currentScene);
+            }
+        }
+
+        function togglePlay() {
+            const playBtn = document.getElementById('playBtn');
+            
+            if (isPlaying) {
+                clearInterval(playInterval);
+                playBtn.textContent = 'Play';
+                isPlaying = false;
+            } else {
+                playBtn.textContent = 'Pause';
+                isPlaying = true;
+                
+                playInterval = setInterval(() => {
+                    if (currentScene < totalScenes) {
+                        nextScene();
+                    } else {
+                        // Auto restart from beginning
+                        currentScene = 1;
+                        showScene(currentScene);
+                    }
+                }, 8000); // 8 seconds per scene
+            }
+        }
+
+        // Keyboard controls
+        document.addEventListener('keydown', (e) => {
+            switch(e.key) {
+                case 'ArrowLeft':
+                    prevScene();
+                    break;
+                case 'ArrowRight':
+                    nextScene();
+                    break;
+                case ' ':
+                    e.preventDefault();
+                    togglePlay();
+                    break;
+            }
+        });
+
+        // Initialize
+        showScene(currentScene);
+
+        // Auto-start animation after 2 seconds
+        setTimeout(() => {
+            if (!isPlaying) {
+                togglePlay();
+            }
+        }, 2000);
+    </script>
+</body>
+</html>
